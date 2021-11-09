@@ -14,4 +14,6 @@ public interface ApoliceService {
 	public ResponseEntity<?> update(Long numero, ApoliceRequestDto pedido);
 	
 	public ResponseEntity<?> delete(Long numero);
+
+	public ResponseEntity<?> consultarPorNumero(Long numero);
 }

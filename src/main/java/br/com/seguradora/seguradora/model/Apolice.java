@@ -37,6 +37,6 @@ public class Apolice {
 	
 	@JsonManagedReference // Anotação necessária para não cair em loop infinito
 	@ManyToOne
-	@JoinColumn(name = "cliente_id", nullable = false) // A anotação @JoinColumn name é o nome que esta coluna terá no BD
+	@JoinColumn(name = "cliente_cpf", nullable = false) // A anotação @JoinColumn name é o nome que esta coluna terá no BD
 	private Cliente cliente;
 }

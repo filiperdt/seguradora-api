@@ -91,4 +91,11 @@ public class ApoliceController {
 		ResponseEntity<?> responseEntity = apoliceService.delete(numero);
 		return responseEntity;
 	}
+	
+	@GetMapping("/consultar-por-numero/{numero}")
+	@ResponseBody
+	public ResponseEntity<?> consultarPorNumero(@PathVariable Long numero) {
+		ResponseEntity<?> responseEntity = apoliceService.consultarPorNumero(numero);
+		return responseEntity;
+	}
 }

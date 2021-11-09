@@ -132,6 +132,20 @@ public class ApoliceServiceImpl implements ApoliceService {
 		return retornaJsonMensagem(msgResposta, true, HttpStatus.NOT_FOUND);
 	}
 	
+	public ResponseEntity<?> consultarPorNumero(Long numero) {
+		Optional<Apolice> optional = apoliceRepository.findByNumero(numero);
+		
+		if(optional.isPresent()) {
+			Apolice apolice = optional.get();
+			ApoliceResponseDto apoliceDto = mapEntityParaDto(apolice, clienteServiceImpl.mapEntityParaDto(apolice.getCliente()));
+			return ResponseEntity.ok().body(apoliceDto);
+		} else {
+			JSONObject msgResposta = new JSONObject();
+			msgResposta.put("message", "Apólice #"+numero+" não encontrada no banco de dados!");
+			return retornaJsonMensagem(msgResposta, true, HttpStatus.NOT_FOUND);
+		}
+	}
+	
 	@Transactional
 	public ApoliceResponseDto mapEntityParaDto(Apolice apolice) {
 		ClienteResponseDto clienteDto = clienteServiceImpl.mapEntityParaDto(apolice.getCliente());
@@ -159,4 +173,5 @@ public class ApoliceServiceImpl implements ApoliceService {
 		
 		return apolice;
 	}
+	
 }

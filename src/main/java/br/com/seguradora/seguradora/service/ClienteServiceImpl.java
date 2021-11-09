@@ -1,5 +1,6 @@
 package br.com.seguradora.seguradora.service;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import br.com.seguradora.seguradora.dto.request.ClienteRequestDto;
 import br.com.seguradora.seguradora.dto.response.ClienteResponseDto;
+import br.com.seguradora.seguradora.model.Apolice;
 import br.com.seguradora.seguradora.model.Cliente;
+import br.com.seguradora.seguradora.repository.ApoliceRepository;
 import br.com.seguradora.seguradora.repository.ClienteRepository;
 import net.minidev.json.JSONObject;
 
@@ -23,6 +26,15 @@ import net.minidev.json.JSONObject;
 public class ClienteServiceImpl implements ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepository;
+	@Autowired
+	private ApoliceRepository apoliceRepository;
+	
+	public String removerAcentos(String texto) {
+		texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
+		texto = texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+		
+		return texto;
+	}
 	
 	public static boolean validarLetras(String texto) {
 		String regexp = "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$"; // Permite letras (sem acentos), pontos (para abreviação) e espaços
@@ -33,7 +45,7 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 	
 	public JSONObject verificaExistenciaCreate(String cpf, JSONObject msgResposta){
-		if(this.clienteRepository.findByCpf(cpf) != null && cpf != "") {
+		if(clienteRepository.findByCpf(cpf).isPresent()) {
 			msgResposta.put("cpf", "CPF '" + cpf + "' já existe no banco!");
 		}
 		
@@ -41,7 +53,7 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 	
 	public JSONObject verificaExistenciaUpdate(String cpf, JSONObject msgResposta, Cliente cliente){
-		if(this.clienteRepository.findByCpf(cpf) != null && cpf != "" && !cpf.equals(cliente.getCpf())) {
+		if(clienteRepository.findByCpf(cpf).isPresent()) {
 			msgResposta.put("cpf", "CPF '" + cpf + "' já existe no banco!");
 		}
 		
@@ -70,7 +82,7 @@ public class ClienteServiceImpl implements ClienteService {
 		String nome = requisicao.getNome().trim();
 		JSONObject msgResposta = new JSONObject();
 		
-		if(validarLetras(nome) == true) {
+		if(validarLetras(removerAcentos(nome)) == true) {
 			String cpf = requisicao.getCpf();
 			
 			requisicao.setNome(nome);
@@ -111,7 +123,7 @@ public class ClienteServiceImpl implements ClienteService {
 		if(optional.isPresent()) {
 			String nome = requisicao.getNome().trim();
 			
-			if(validarLetras(nome) == true) {
+			if(validarLetras(removerAcentos(nome)) == true) {
 				Cliente cliente = optional.get();
 				String cpfVerificar = requisicao.getCpf();
 				
@@ -135,19 +147,23 @@ public class ClienteServiceImpl implements ClienteService {
 		msgResposta.put("message", "Cliente CPF "+cpf+" não encontrado no banco de dados!");
 		return retornaJsonMensagem(msgResposta, true, HttpStatus.NOT_FOUND);
 	}
-
+	
+	@Transactional
 	public ResponseEntity<?> delete(String cpf) {
 		Optional<Cliente> optional = this.clienteRepository.findByCpf(cpf);
 		JSONObject msgResposta = new JSONObject();
 		
 		if(optional.isPresent()) {
-			try {
-				this.clienteRepository.deleteByCpf(cpf);
-				msgResposta.put("message", "Cliente CPF "+cpf+" excluído com sucesso!");
-				return retornaJsonMensagem(msgResposta, false, HttpStatus.OK);
-			} catch(Exception e) {
-				msgResposta.put("message", "Falha na exclusão! Certifique-se de que o cliente CPF "+cpf+" não esteja relacionado em nenhuma apólice!");
+			List<Apolice> listApoliceCliente = apoliceRepository.encontrarPorCliente(cpf);
+			
+			if(listApoliceCliente.size() > 0) {
+				Long apoliceClienteNumero = listApoliceCliente.get(0).getNumero();
+				msgResposta.put("message", "Falha na exclusão! Certifique-se de que o cliente CPF "+cpf+" não esteja relacionado em nenhuma apólice! Verifique a apólice #" + apoliceClienteNumero);
 				return retornaJsonMensagem(msgResposta, true, HttpStatus.CONFLICT);
+			} else {
+				clienteRepository.deleteByCpf(cpf);
+				msgResposta.put("message", "Cliente CPF "+cpf+" excluído com sucesso!");
+				return retornaJsonMensagem(msgResposta, false, HttpStatus.OK);				
 			}
 		}
 		
