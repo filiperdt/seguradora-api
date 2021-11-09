@@ -23,9 +23,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ApoliceRequestDto {
-	@NotNull(message = "Início da vigência não pode ser null")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate inicioVigencia;
 	@NotNull(message = "Fim da vigência não pode ser null")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate fimVigencia;
@@ -35,4 +32,8 @@ public class ApoliceRequestDto {
 	@NotNull(message = "Valor não pode ser null")
 	@PositiveOrZero(message = "Valor não pode ser negativo")
 	private BigDecimal valor;
+	
+	@NotNull(message = "Cliente não pode ser null")
+	@NotBlank(message = "Cliente é obrigatório")
+	private String cliente;
 }

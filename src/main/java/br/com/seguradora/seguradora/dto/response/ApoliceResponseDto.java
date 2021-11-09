@@ -1,6 +1,5 @@
 package br.com.seguradora.seguradora.dto.response;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
@@ -21,5 +20,6 @@ public class ApoliceResponseDto {
 	private LocalDate inicioVigencia;
 	private LocalDate fimVigencia;
 	private String placaVeiculo;
-	private BigDecimal valor;
+	private String valor;
+	private ClienteResponseDto cliente;
 }

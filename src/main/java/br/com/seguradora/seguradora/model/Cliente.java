@@ -8,16 +8,13 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor
 @Entity
 public class Cliente {
-	@Setter(AccessLevel.NONE)
 	@Column(nullable = false, unique = true)
 	private String cpf;
 	@Column(nullable = false)
