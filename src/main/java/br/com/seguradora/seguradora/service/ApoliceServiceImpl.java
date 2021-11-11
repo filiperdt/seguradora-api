@@ -64,13 +64,18 @@ public class ApoliceServiceImpl implements ApoliceService {
 			
 			Apolice apolice = mapDtoParaEntity(requisicao, new Apolice(), cliente);
 			
-			apolice.setInicioVigencia(LocalDate.now());
-			Apolice apoliceSalva = apoliceRepository.save(apolice);
-			ApoliceResponseDto apoliceResponseDtoSalva = mapEntityParaDto(apoliceSalva, clienteServiceImpl.mapEntityParaDto(cliente));
-			return ResponseEntity.created(null).body(apoliceResponseDtoSalva);
+			if(apolice.getFimVigencia().isAfter(LocalDate.now())) {
+				apolice.setInicioVigencia(LocalDate.now());
+				Apolice apoliceSalva = apoliceRepository.save(apolice);
+				ApoliceResponseDto apoliceResponseDtoSalva = mapEntityParaDto(apoliceSalva, clienteServiceImpl.mapEntityParaDto(cliente));
+				return ResponseEntity.created(null).body(apoliceResponseDtoSalva);
+			}
+			
+			msgResposta.put("fimVigencia", "A data do fim da vigência deve estar à frente da data do início da vigência");
+			return retornaJsonMensagem(msgResposta, true, HttpStatus.BAD_REQUEST);
 		}
 		
-		msgResposta.put("message", "Cliente CPF "+clienteCpf+" não encontrado no banco de dados!");
+		msgResposta.put("cliente", "Cliente CPF "+clienteCpf+" não encontrado no banco de dados!");
 		return retornaJsonMensagem(msgResposta, true, HttpStatus.NOT_FOUND);
 	}
 
@@ -105,12 +110,17 @@ public class ApoliceServiceImpl implements ApoliceService {
 				
 				Apolice apoliceEntity = mapDtoParaEntity(requisicao, apolice, clienteEntity);
 				
-				Apolice apoliceSalva = apoliceRepository.save(apoliceEntity);
-				ApoliceResponseDto apoliceResponseDtoSalva = mapEntityParaDto(apoliceSalva, clienteServiceImpl.mapEntityParaDto(clienteEntity));
-				return ResponseEntity.ok().body(apoliceResponseDtoSalva);
+				if(apolice.getFimVigencia().isAfter(apolice.getInicioVigencia())) {
+					Apolice apoliceSalva = apoliceRepository.save(apoliceEntity);
+					ApoliceResponseDto apoliceResponseDtoSalva = mapEntityParaDto(apoliceSalva, clienteServiceImpl.mapEntityParaDto(clienteEntity));
+					return ResponseEntity.ok().body(apoliceResponseDtoSalva);
+				}
+				
+				msgResposta.put("fimVigencia", "A data do fim da vigência deve estar à frente da data do início da vigência");
+				return retornaJsonMensagem(msgResposta, true, HttpStatus.BAD_REQUEST);
 			}
 			
-			msgResposta.put("message", "Cliente CPF "+clienteCpf+" não encontrado no banco de dados!");
+			msgResposta.put("cliente", "Cliente CPF "+clienteCpf+" não encontrado no banco de dados!");
 			return retornaJsonMensagem(msgResposta, true, HttpStatus.NOT_FOUND);
 		}
 		
@@ -118,6 +128,7 @@ public class ApoliceServiceImpl implements ApoliceService {
 		return retornaJsonMensagem(msgResposta, true, HttpStatus.NOT_FOUND);
 	}
 
+	@Transactional
 	public ResponseEntity<?> delete(Long numero) {
 		Optional<Apolice> optional = this.apoliceRepository.findByNumero(numero);
 		JSONObject msgResposta = new JSONObject();
@@ -141,7 +152,7 @@ public class ApoliceServiceImpl implements ApoliceService {
 			return ResponseEntity.ok().body(apoliceDto);
 		} else {
 			JSONObject msgResposta = new JSONObject();
-			msgResposta.put("message", "Apólice #"+numero+" não encontrada no banco de dados!");
+			msgResposta.put("numero", "Apólice #"+numero+" não encontrada no banco de dados!");
 			return retornaJsonMensagem(msgResposta, true, HttpStatus.NOT_FOUND);
 		}
 	}

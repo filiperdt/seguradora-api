@@ -98,7 +98,7 @@ public class ClienteServiceImpl implements ClienteService {
 			}
 		}
 		
-		msgResposta.put("message", "Nome inválido!");
+		msgResposta.put("nome", "Nome inválido!");
 		return retornaJsonMensagem(msgResposta, true, HttpStatus.BAD_REQUEST);
 	}
 
@@ -140,7 +140,7 @@ public class ClienteServiceImpl implements ClienteService {
 				}
 			}
 			
-			msgResposta.put("message", "Nome inválido!");
+			msgResposta.put("nome", "Nome inválido!");
 			return retornaJsonMensagem(msgResposta, true, HttpStatus.BAD_REQUEST);
 		}
 		
