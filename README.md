@@ -1,1 +1,1 @@
-# seguradora-api
+# Seguradora de veículos - API
