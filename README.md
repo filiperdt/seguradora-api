@@ -142,7 +142,7 @@ Os parâmetros abaixo existirão apenas se houver erro no preenchimento de seus 
 > - GET /apolices - Listar Apólices.
 > - POST /apolices - Criar Apólice (Necessário fornecer [Apólice](#parâmetros-de-apólice), dentro do corpo da solicitação).
 > - GET /apolices/:numero - Exibir Apólice.
-> - PUT /apolices/:numero - Atualizar Apólice (Necessário fornecer os campos de [Apólice](#parâmetros-de-apolice) a ser atualizado, dentro do corpo da solicitação).
+> - PUT /apolices/:numero - Atualizar Apólice (Necessário fornecer os campos de [Apólice](#parâmetros-de-apólice) a ser atualizado, dentro do corpo da solicitação).
 > - DELETE /apolices/:numero - Excluir Apólice.
 > - GET /apolices/consultar-por-numero/:numero - Consultar Apólice pelo número.
 
