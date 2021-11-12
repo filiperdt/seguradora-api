@@ -1,7 +1,7 @@
 # Seguradora de veículos - API
 
 ## Sobre este Projeto
-Este é o back-end do [Seguradora de veículos - Aplicação](https://github.com/filiperdt/seguradora-aplicacao).
+Este é o back-end do sistema [Seguradora de veículos - Aplicação](https://github.com/filiperdt/seguradora-aplicacao).
 
 O objetivo desta API REST é gerenciar uma seguradora de veículos.
 
@@ -11,7 +11,7 @@ O projeto faz parte do meu portfólio pessoal.
 
 ### Pré-requisitos
 - Java 11.
-- O banco de dados PostgreSQL deve estar instalado e em execução na porta padrão, 5432. A versão utilizada no desenvolvimento foi a 12.1.
+- O banco de dados PostgreSQL deve estar instalado e em execução na porta padrão, 5432. A versão do PostgreSQL utilizada no desenvolvimento foi a 12.1.
 - Deve ser criado um banco de dados chamado 'seguradora'. Dentro dele, deve ser criado um schema, também chamado 'seguradora'.
 
 ## Rotas
@@ -221,7 +221,7 @@ Os parâmetros abaixo existirão apenas se houver erro no preenchimento de seus 
 > *message*: Seu valor será:
 > - "Apólice #*numero* não encontrada no banco de dados!".
 
-Os parâmetros abaixo existirão apenas se houver erro no preenchimento destes campos no formulário:
+Os parâmetros abaixo existirão apenas se houver erro no preenchimento de seus respectivos campos no formulário:
 > *numero*: Seu valor será:
 > - "Apólice #*numero* não encontrada no banco de dados!".
 
