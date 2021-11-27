@@ -88,8 +88,9 @@ Cliente {
 
 Os parâmetros abaixo existirão apenas se houver erro no preenchimento de seus respectivos campos no formulário:
 > *cpf*: Seu valor pode ser:
+> - "CPF não pode ser null"; *ou*
+> - "CPF é obrigatório"; *ou*
 > - "CPF inválido"; *ou*
-> - "Descrição é obrigatório"; *ou*
 > - "CPF *cpf* já existe no banco!".
 
 > *nome*: Seu valor pode ser:
