@@ -19,15 +19,17 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ClienteRequestDto {
-	@CPF(message = "CPF inválido")
+	@NotNull(message = "{cliente.cpf.notnull}")
+	@NotBlank(message = "{cliente.cpf.notblank}")
+	@CPF(message = "{cliente.cpf.cpf}")
 	private String cpf;
-	@NotNull(message = "Nome não pode ser null")
-	@NotBlank(message = "Nome é obrigatório")
+	@NotNull(message = "{cliente.nome.notnull}")
+	@NotBlank(message = "{cliente.nome.notblank}")
 	private String nome;
-	@NotNull(message = "Cidade não pode ser null")
-	@NotBlank(message = "Cidade é obrigatório")
+	@NotNull(message = "{cliente.cidade.notnull}")
+	@NotBlank(message = "{cliente.cidade.notblank}")
 	private String cidade;
-	@NotNull(message = "UF não pode ser null")
-	@NotBlank(message = "UF é obrigatório")
+	@NotNull(message = "{cliente.uf.notnull}")
+	@NotBlank(message = "{cliente.uf.notblank}")
 	private String uf;
 }

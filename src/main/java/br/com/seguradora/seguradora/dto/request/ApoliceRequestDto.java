@@ -23,17 +23,17 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ApoliceRequestDto {
-	@NotNull(message = "Fim da vigência não pode ser null")
+	@NotNull(message = "{apolice.fimVigencia.notnull}")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate fimVigencia;
-	@NotNull(message = "Placa do veículo não pode ser null")
-	@NotBlank(message = "Placa do veículo é obrigatório")
+	@NotNull(message = "{apolice.placaVeiculo.notnull}")
+	@NotBlank(message = "{apolice.placaVeiculo.notblank}")
 	private String placaVeiculo;
-	@NotNull(message = "Valor não pode ser null")
-	@PositiveOrZero(message = "Valor não pode ser negativo")
+	@NotNull(message = "{apolice.valor.notnull}")
+	@PositiveOrZero(message = "{apolice.valor.positiveorzero}")
 	private BigDecimal valor;
 	
-	@NotNull(message = "Cliente não pode ser null")
-	@NotBlank(message = "Cliente é obrigatório")
+	@NotNull(message = "{apolice.cliente.notnull}")
+	@NotBlank(message = "{apolice.cliente.notblank}")
 	private String cliente;
 }
